@@ -2,70 +2,83 @@
 DSN、Data Source Name
 ========================================
 
-Doctrineを通してデータベースに接続するには、有効なDSN(Data Source
-Name)を作らなければなりません。
+Doctrineを通してデータベースに接続するには、有効なDSN(Data Source Name)を作らなければなりません。
 
-DoctrineはPDOスタイルと同じようにPEAR
-DB/MDB2のDSNをサポートします。次のセクションではPEARのDSN形式を扱います。PDOスタイルのDSNの詳しい情報が必要であれば[http://www.php.net/pdo
-PDO]のドキュメントを参照してください。
+DoctrineはPDOスタイルと同じようにPEAR DB/MDB2のDSNをサポートします。次のセクションではPEARのDSN形式を扱います。PDOスタイルのDSNの詳しい情報が必要であれば`PDO <http://www.php.net/PDO>`_のドキュメントを参照してください。
 
 DSNは次の部分で構成されます:
 
-\|\|~ DSNの部分 \|\|~ 説明 \|\| \|\| ``phptype`` \|\|
-PHPで使われるデータベース (すなわちmysql、pgsqlなど) \|\| \|\|
-``dbsyntax`` \|\| SQL構文などで使われるデータベース。 \|\| \|\|
-``protocol`` \|\|
-使用するコミュニケーションプロトコル(すなわち、tcp、unixなど) \|\| \|\|
-``hostspec`` \|\| ホストのスペック(hostname[:port]) \|\| \|\|
-``database`` \|\| DBMSサーバーで使うデータベース \|\| \|\| ``username``
-\|\| ログイン用のユーザー名 \|\| \|\| ``password`` \|\|
-ログイン用のパスワード \|\| \|\| ``proto_opts`` \|\|
-プロトコルで使われる \|\| \|\| ``option `` \|\|
-URIクエリ文字列形式の追加接続オプション。オプションはアンパサンド(&)で分離されます。次のテーブルでオプションの不完全なリストを示します:
-\|\|
+============== ========================================================
+DSNの部分       説明
+============== ========================================================
+``phptype``    PHPで使われるデータベース (すなわちmysql、pgsqlなど)
+``dbsyntax``   SQL構文などで使われるデータベース。
+``protocol``   使用するコミュニケーションプロトコル(すなわち、tcp、unixなど)
+``hostspec``   ホストのスペック(hostname[:port])
+``database``   DBMSサーバーで使うデータベース
+``username``   ログイン用のユーザー名
+``password``   ログイン用のパスワード
+``proto_opts`` プロトコルで使われる
+``option``     URIクエリ文字列形式の追加接続オプション。オプションはアンパサンド(&)で分離されます。次のテーブルでオプションの不完全なリストを示します:
+============== ========================================================
 
 **オプションのリスト**
 
-\|\|~ 名前 \|\|~ 説明 \|\| \|\| ``charset`` \|\|
-クライアントの文字集合を設定するバックエンドサポート。\|\| \|\|
-``new_link``\|\|
-同じホストに複数回接続する場合RDBMSの中には新しい接続を作成しないものがあります。このオプションによって新しい接続の強制が試みられます。\|\|
+============ ====================================================
+名前         説明
+============ ====================================================
+``charset``  クライアントの文字集合を設定するバックエンドサポート。
+``new_link`` 同じホストに複数回接続する場合RDBMSの中には新しい接続を作成しないものがあります。このオプションによって新しい接続の強制が試みられます。
+============ ====================================================
 
-DSNは連想配列もしくは文字列のどちらかで提供できます。提供されたDSNの文字列フォーマットの完全な表記は次の通りです:
+DSNは連想配列もしくは文字列のどちらかで提供できます。提供されたDSNの文字列フォーマットの完全な表記は次の通りです::
 
+  phptype(dbsyntax)://username:password@protocol+hostspec/database?option=value
 
-phptype(dbsyntax)://username:password@protocol+hostspec/database?option=value
+大抵のバリアントは許容されます::
 
-大抵のバリアントは許容されます:
-
- phptype://username:password@protocol+hostspec:110//usr/db\_file.db
-phptype://username:password@hostspec/database
-phptype://username:password@hostspec phptype://username@hostspec
-phptype://hostspec/database phptype://hostspec phptype:///database
-phptype:///database?option=value&anotheroption=anothervalue
-phptype(dbsyntax) phptype
+  phptype://username:password@protocol+hostspec:110//usr/db\_file.db
+  phptype://username:password@hostspec/database
+  phptype://username:password@hostspec phptype://username@hostspec
+  phptype://hostspec/database phptype://hostspec phptype:///database
+  phptype:///database?option=value&anotheroption=anothervalue
+  phptype(dbsyntax) phptype
 
 現在サポートされるPDOのデータベースドライバは次の通りです:
 
-\|\|~ ドライバの名前 \|\|~ サポートされるデータベース \|\| \|\|
-``fbsql`` \|\| FrontBase \|\| \|\| ``ibase`` \|\| InterBase / Firebird
-(PHP 5が必須) \|\| \|\| ``mssql`` \|\| Microsoft SQL Server
-(Sybase**ではない**。Compile PHP --with-mssql) \|\| \|\| ``mysql`` \|\|
-MySQL \|\| \|\| ``mysqli`` \|\| MySQL (新しい認証プロトコル) (PHP
-5が必須) \|\| \|\| ``oci`` \|\| Oracle 7/8/9/10 \|\| \|\| ``pgsql`` \|\|
-PostgreSQL \|\| \|\| ``querysim`` \|\| QuerySim \|\| \|\| ``sqlite``
-\|\| SQLite 2 \|\|
+============= ==================================================================
+ドライバの名前 サポートされるデータベース
+============= ==================================================================
+``fbsql``     FrontBase
+``ibase``     InterBase / Firebird (PHP 5が必須)
+``mssql``     Microsoft SQL Server (Sybase**ではない**。Compile PHP --with-mssql)
+``mysql``     MySQL
+``mysqli``    MySQL (新しい認証プロトコル) (PHP 5が必須)
+``oci``       Oracle 7/8/9/10
+``pgsql``     PostgreSQL
+``querysim``  QuerySim
+``sqlite``    SQLite 2
+============= ==================================================================
 
-サポートされる2番目のDSNは次の通りです
+サポートされる2番目のDSNは次の通りです::
 
- phptype(syntax)://user:pass@protocol(proto\_opts)/database
+  phptype(syntax)://user:pass@protocol(proto\_opts)/database
 
 データベース、オプションの値、ユーザー名もしくはパスワードにDSNを区切るために使われる文字が含まれる場合、URIの16進法のエンコーディングを通してエスケープできます:
 
-\|\|~ 文字 \|\|~ 16進法 \|\| \|\| ``:`` \|\| %3a \|\| \|\| ``/`` \|\|
-%2f \|\| \|\| ``@`` \|\| %40 \|\| \|\| ``+`` \|\| %2b \|\| \|\| ``(``
-\|\| %28 \|\| \|\| ``)`` \|\| %29 \|\| \|\| `` ?`` \|\| %3f \|\| \|\|
-``=`` \|\| %3d \|\| \|\| ``&`` \|\| %26 \|\|
+====== =======
+文字    16進法
+====== =======
+``:``   %3a
+``/``   %2f
+``@``   %40
+``+``   %2b
+``(``   %28
+``)``   %29
+``?``   %3f
+``=``   %3d
+``&``   %26
+====== =======
 
 機能の中にはすべてのデータベースでサポートされないものがあることに十分注意してくださるようお願いします。
 
@@ -73,37 +86,35 @@ PostgreSQL \|\| \|\| ``querysim`` \|\| QuerySim \|\| \|\| ``sqlite``
 例
 ----------
 
-**例 1.** ソケットを通したデータベースへの接続
+**例 1.** ソケットを通したデータベースへの接続::
 
- mysql://user@unix(/path/to/socket)/pear
+  mysql://user@unix(/path/to/socket)/pear
 
-**例 2.** 非標準ポートでのデータベースへの接続
+**例 2.** 非標準ポートでのデータベースへの接続::
 
- pgsql://user:pass@tcp(localhost:5555)/pear
+  pgsql://user:pass@tcp(localhost:5555)/pear
 
     **NOTE**
     使うのであれば、IPアドレス``{127.0.0.1}``、ポートパラメータ(デフォルト:
     3306)は無視されます。
 
-**例 3.** オプションを利用するUnixマシン上でのSQLiteへの接続
+**例 3.** オプションを利用するUnixマシン上でのSQLiteへの接続::
 
- sqlite:////full/unix/path/to/file.db?mode=0666
+  sqlite:////full/unix/path/to/file.db?mode=0666
 
-**例 4.** オプションを利用してWindowsマシンでSQLiteに接続する
+**例 4.** オプションを利用してWindowsマシンでSQLiteに接続する::
 
- sqlite:///c:/full/windows/path/to/file.db?mode=0666
+  sqlite:///c:/full/windows/path/to/file.db?mode=0666
 
-**例 5.** SSLを利用してMySQLiに接続する
+**例 5.** SSLを利用してMySQLiに接続する::
 
-
-mysqli://user:pass@localhost/pear?key=client-key.pem&cert=client-cert.pem
+  mysqli://user:pass@localhost/pear?key=client-key.pem&cert=client-cert.pem
 
 ================
 新しい接続を開く
 ================
 
-Doctrineで新しいデータベース接続を開くのはとても簡単です。[http://www.php.net/PDO
-PDO]を使う場合、新しいPDOオブジェクトを初期化するだけです。
+Doctrineで新しいデータベース接続を開くのはとても簡単です。`PDO <http://www.php.net/PDO>`_を使う場合、新しいPDOオブジェクトを初期化するだけです。
 
 [doc getting-started
 :name]の章で作成した``bootstrap.php``ファイルを覚えていますか？Doctrineのオートローダーが登録されたコードで、新しい接続をインスタンス化します:
